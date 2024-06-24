@@ -4,8 +4,8 @@ import datetime
 import mysql.connector
 
 # Obter a data atual
-# data_atual = datetime.datetime.now().strftime("%Y-%m-%d")
-data_atual = datetime.datetime.now().strftime("%d-%m-%Y")
+data_atual = datetime.datetime.now().strftime("%Y-%m-%d")
+#data_atual = datetime.datetime.now().strftime("%d-%m-%Y")
 
 # Obter a data atual
 #data_atual = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
@@ -46,7 +46,7 @@ try:
     # Criar uma tabela para armazenar os indicadores, se ela ainda não existir
     cursor = conn.cursor()
 
-    cursor.execute('''drop table indicadores2''')
+    cursor.execute("DROP TABLE IF EXISTS indicadores2")
 
     cursor.execute('''CREATE TABLE IF NOT EXISTS indicadores2 (
                         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -61,7 +61,7 @@ try:
     for empresa, indicadores in indicadores_empresas.items():
         for indicador, valor in indicadores.items():
             # Inserir os valores na tabela
-            insert_query = "INSERT INTO indicadores2_{data_atual} (data, empresa, indicador, valor) VALUES (%s, %s, %s, %s)"
+            insert_query = "INSERT INTO indicadores2 (data, empresa, indicador, valor) VALUES (%s, %s, %s, %s)"
             cursor.execute(insert_query, (data_atual, empresa, indicador, valor))
 
             # Lógica para atualizar a recomendação com base no indicador e valor
