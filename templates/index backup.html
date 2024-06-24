@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indicadores Financeiros</title>
+</head>
+<body>
+    <h1>Indicadores Financeiros</h1>
+
+    <form action="/" method="POST">
+        <label for="empresa">Selecione uma empresa:</label>
+        <select name="empresa" id="empresa">
+            <option value="">Todas as empresas</option>
+            {% for empresa in empresas %}
+            <option value="{{ empresa }}">{{ empresa }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Filtrar</button>
+    </form>
+
+    <br>
+
+    <table border="1">
+        <tr>
+            <th>Data</th>
+            <th>Empresa</th>
+            <th>Indicador</th>
+            <th>Valor</th>
+            <th>Recomendação</th>
+        </tr>
+        {% for indicador in indicadores %}
+        <tr>
+            <td>{{ indicador.data }}</td>
+            <td>{{ indicador.empresa }}</td>
+            <td>{{ indicador.indicador }}</td>
+            <td>{{ indicador.valor }}</td>
+            <td>{{ indicador.recomendacao }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

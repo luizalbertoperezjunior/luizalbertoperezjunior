@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indicadores</title>
+</head>
+<body>
+    <h1>Indicadores</h1>
+    <table border="1">
+        <tr>
+            <th>Data</th>
+            <th>Empresa</th>
+            <th>Indicador</th>
+            <th>Valor</th>
+            <th>Recomendação</th>
+        </tr>
+
+        {% set valor_close = None %}
+        {% set valor_EMA5 = None %}
+
+        {% for indicador in indicadores %}
+            <tr>
+                <td>{{ indicador.data.strftime("%d/%m/%Y") }}</td>
+                <td>{{ indicador.empresa }}</td>
+                <td>{{ indicador.indicador }}</td>
+                <td>{{ indicador.valor }}</td>
+                <td>
+                    {% if indicador.indicador in ["RSI", "RSI[1]", "Stoch.K", "Stoch.D", "Stoch.K[1]", "Stoch.D[1]"] %}
+                        {% if indicador.valor > 70 %}
+                            Venda
+                        {% elif indicador.valor < 30 %}
+                            Compra
+                        {% else %}
+                            Neutro
+                        {% endif %}
+                    
+                    {% elif indicador.indicador in ["MACD.macd", "MACD.signal"] %}
+                        {% if indicador.valor > 0 %}
+                            Compra
+                        {% else %}
+                            Venda
+                        {% endif %}
+                    
+                    {% elif indicador.indicador in ["CCI20", "CCI20[1]"] %}
+                        {% if indicador.valor < -100 %}
+                            Compra
+                        {% elif indicador.valor > 100 %}
+                            Venda
+                        {% else %}
+                            Neutro
+                        {% endif %}
+                    
+                    {% elif indicador.indicador in ["ADX", "ADX+DI", "ADX-DI", "ADX+DI[1]", "ADX-DI[1]", "AO", "AO[1]", "Mom", "Mom[1]"] %}
+                        {% if indicador.valor > 50 %}
+                            Venda
+                        {% elif indicador.valor < 50 %}
+                            Compra
+                        {% else %}
+                            Neutro
+                        {% endif %}
+                    
+                    {% elif indicador.indicador in ["Rec.Stoch.RSI", "Stoch.RSI.K", "Rec.WR", "W.R", "Rec.BBPower", "BBPower", "Rec.UO", "UO"] %}
+                        {% if indicador.valor > 0 %}
+                            Venda
+                        {% elif indicador.valor < 0 %}
+                            Compra
+                        {% else %}
+                            Neutro
+                        {% endif %}
+                    
+                    {% endif %}
+
+                    {% if indicador.indicador == "close" %}
+                        {% set valor_close = indicador.valor %}
+                    {% elif indicador.indicador == "EMA5" %}
+                        {% set valor_EMA5 = indicador.valor %}
+                    {% endif %}
+
+                    {% if valor_close is not none and valor_EMA5 is not none %}
+                        {% if valor_close > valor_EMA5 %}
+                            Venda
+                        {% elif valor_close < valor_EMA5 %}
+                            Compra
+                        {% else %}
+                            Neutro
+                        {% endif %}
+                    {% else %}
+                        Sem recomendação
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ empresa }}</title>
+    <style>
+        /* Estilos CSS aqui */
+    </style>
+</head>
+<body>
+    <h1>Indicadores da Empresa {{ empresa }}</h1>
+    <form action="/empresa/{{ empresa }}" method="GET">
+        <label for="data_inicio">Data Início:</label>
+        <input type="date" id="data_inicio" name="data_inicio">
+        <label for="data_fim">Data Fim:</label>
+        <input type="date" id="data_fim" name="data_fim">
+        <button type="submit">Filtrar</button>
+    </form>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Indicador</th>
+                <th>Valor</th>
+                <th>Valor Anterior</th>
+                <th>Recomendação</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for indicador in indicadores %}
+            <tr>
+                <td>{{ indicador.data.strftime("%d/%m/%Y") }}</td>
+                <td>{{ indicador.indicador }}</td>
+                <td>{{ indicador.valor }}</td>
+                <td>{% if indicador.valor_anterior is not none %}{{ indicador.valor_anterior }}{% else %} - {% endif %}</td>
+                <td>{{ indicador.recomendacao }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
