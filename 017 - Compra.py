@@ -12,7 +12,7 @@ db_config = {
 }
 
 # Rota para exibir os indicadores financeiros
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/Compra', methods=['GET', 'POST'])
 def index():
     # Conecta ao banco de dados MySQL
     connection = mysql.connector.connect(**db_config)
@@ -23,6 +23,8 @@ def index():
     cursor_empresas.execute(query_empresas)
     empresas = [empresa[0] for empresa in cursor_empresas.fetchall()]
 
+    indicadores = []
+
     # Verifica se o formulário foi submetido
     if request.method == 'POST':
         # Obtém o valor selecionado no campo de seleção de empresa
@@ -30,23 +32,23 @@ def index():
 
         # Prepara a query SQL para selecionar os indicadores filtrados
         if empresa_selecionada:
-            query_indicadores = "SELECT * FROM indicadores2 WHERE empresa = %s"
+            query_indicadores = "SELECT * FROM indicadores2 WHERE empresa = %s AND recomendacao LIKE %s"
             cursor_indicadores = connection.cursor(dictionary=True)
-            cursor_indicadores.execute(query_indicadores, (empresa_selecionada,))
+            cursor_indicadores.execute(query_indicadores, (empresa_selecionada, '%Compra%'))
             indicadores = cursor_indicadores.fetchall()
             cursor_indicadores.close()
         else:
-            # Se nenhuma empresa selecionada, exibe todos os indicadores
-            query_indicadores = "SELECT * FROM indicadores2"
+            # Se nenhuma empresa selecionada, exibe todos os indicadores com recomendação de compra
+            query_indicadores = "SELECT * FROM indicadores2 WHERE recomendacao LIKE %s"
             cursor_indicadores = connection.cursor(dictionary=True)
-            cursor_indicadores.execute(query_indicadores)
+            cursor_indicadores.execute(query_indicadores, ('%Compra%',))
             indicadores = cursor_indicadores.fetchall()
             cursor_indicadores.close()
     else:
-        # Se o método for GET (primeiro acesso), exibe todos os indicadores
-        query_indicadores = "SELECT * FROM indicadores2"
+        # Se o método for GET (primeiro acesso), exibe todos os indicadores com recomendação de compra
+        query_indicadores = "SELECT * FROM indicadores2 WHERE recomendacao LIKE %s"
         cursor_indicadores = connection.cursor(dictionary=True)
-        cursor_indicadores.execute(query_indicadores)
+        cursor_indicadores.execute(query_indicadores, ('%Compra%',))
         indicadores = cursor_indicadores.fetchall()
         cursor_indicadores.close()
 
@@ -55,9 +57,7 @@ def index():
     connection.close()
 
     # Renderiza o template HTML e passa os dados dos indicadores e das empresas
-    return render_template('index4.html', indicadores=indicadores, empresas=empresas)
-
-
+    return render_template('index3.html', indicadores=indicadores, empresas=empresas)
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -5,6 +5,9 @@ import mysql.connector
 
 # Obter a data atual
 data_atual = datetime.datetime.now().strftime("%Y-%m-%d")
+
+data_hoje = datetime.datetime.now().strftime("%d_%m_%Y")
+
 #data_atual = datetime.datetime.now().strftime("%d-%m-%Y")
 
 # Obter a data atual
@@ -43,12 +46,20 @@ conn = mysql.connector.connect(
 )
 
 try:
+
     # Criar uma tabela para armazenar os indicadores, se ela ainda não existir
     cursor = conn.cursor()
+    
 
-    cursor.execute("DROP TABLE IF EXISTS indicadores2")
+    # Formatar o nome da tabela com a data atual
+    # table_name = f"indicadores2_{data_hoje}"
 
-    cursor.execute('''CREATE TABLE IF NOT EXISTS indicadores2 (
+    # Drop da tabela antiga se existir
+    cursor.execute(f"DROP TABLE IF EXISTS indicadores")
+
+    # cursor.execute("DROP TABLE IF EXISTS indicadores2")
+
+    cursor.execute('''CREATE TABLE IF NOT EXISTS indicadores (
                         id INT AUTO_INCREMENT PRIMARY KEY,
                         data DATE,
                         empresa VARCHAR(255),
@@ -57,11 +68,12 @@ try:
                         recomendacao VARCHAR(255)
                     )''')
 
+
     # Iterar sobre os indicadores e salvar no banco de dados
     for empresa, indicadores in indicadores_empresas.items():
         for indicador, valor in indicadores.items():
             # Inserir os valores na tabela
-            insert_query = "INSERT INTO indicadores2 (data, empresa, indicador, valor) VALUES (%s, %s, %s, %s)"
+            insert_query = "INSERT INTO indicadores (data, empresa, indicador, valor) VALUES (%s, %s, %s, %s)"
             cursor.execute(insert_query, (data_atual, empresa, indicador, valor))
 
             # Lógica para atualizar a recomendação com base no indicador e valor
@@ -580,11 +592,10 @@ try:
                         # "P.SAR", "BB.lower", "BB.upper", "AO[2]"
 
 
-            else:
-                recomendacao = "Sem recomendação"
+            recomendacao = "Sem recomendação"
 
             # Comando SQL para atualizar dados na tabela
-            update_query = "UPDATE indicadores2 SET recomendacao = %s WHERE empresa = %s AND indicador = %s"
+            update_query = "UPDATE indicadores SET recomendacao = %s WHERE empresa = %s AND indicador = %s"
             cursor.execute(update_query, (recomendacao, empresa, indicador))
 
     # Confirmar as alterações no banco de dados

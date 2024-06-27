@@ -10,6 +10,7 @@
     <div class="container">
         <h1>Indicadores Financeiros</h1>
 
+        <!-- Form for selecting company -->
         <form action="/" method="POST" class="form-empresa">
             <label for="empresa">Selecione uma empresa:</label>
             <select name="empresa" id="empresa">
@@ -21,6 +22,7 @@
             <button type="submit">Filtrar</button>
         </form>
 
+        <!-- Table for displaying financial indicators -->
         <table class="tabela-indicadores">
             <thead>
                 <tr>
@@ -38,22 +40,16 @@
                     <td>{{ indicador.empresa }}</td>
                     <td>{{ indicador.indicador }}</td>
                     <td>{{ indicador.valor }}</td>
-                    <td class="{% if 'Compra' in indicador.recomendacao %}compra{% elif 'Venda' in indicador.recomendacao %}venda{% endif %}{% elif 'Neutro' in indicador.recomendacao %}neutro{% endif %}">
+                    <td class="{% if 'Compra' in indicador.recomendacao %}compra{% endif %}
+                                {% if 'Venda' in indicador.recomendacao %}venda{% endif %}
+                                {% if 'Neutro' in indicador.recomendacao %}neutro{% endif %}">
                         {{ indicador.recomendacao }}
                     </td>
-
-                    <!-- <td class="{% if 'Compra' in indicador.recomendacao %}compra{% elif 'Venda' in indicador.recomendacao %}venda{% endif %}">
-                        {{ indicador.recomendacao }}
-                    </td> -->
-                    
-                    <!-- <td class="{% if indicador.recomendacao == 'Compra' %}compra{% elif indicador.recomendacao == 'Venda' %}venda{% endif %}">
-                        {{ indicador.recomendacao }}
-                    </td> -->
-                   <!-- <td>{{ indicador.recomendacao }}</td> -->
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
 </body>
+
 </html>

@@ -74,3 +74,28 @@ h1 {
 .tabela-indicadores tr:hover {
     background-color: #ddd;
 }
+
+
+
+
+/* Atualização de campos recomendação */
+
+.tabela-indicadores td.compra {
+    /*color: green; /* Você pode usar 'background-color' para mudar a cor de fundo */
+    font-weight: bold;
+    background-color: green;
+
+}
+
+.tabela-indicadores td.venda {
+    /*color: red; /* Você pode usar 'background-color' para mudar a cor de fundo */
+    font-weight: bold;
+    background-color: red;
+}
+
+.tabela-indicadores td.neutro {
+    /*color: red; /* Você pode usar 'background-color' para mudar a cor de fundo */
+    font-weight: bold;
+    background-color: yellow;
+}
+
