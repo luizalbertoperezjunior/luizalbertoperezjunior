@@ -18,7 +18,7 @@ def index():
     connection = mysql.connector.connect(**db_config)
 
     # Prepara a query SQL para selecionar os indicadores
-    query = "SELECT * FROM indicadores2"
+    query = "SELECT * FROM indicadores"
 
     # Executa a query
     cursor = connection.cursor(dictionary=True)

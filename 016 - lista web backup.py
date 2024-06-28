@@ -18,7 +18,7 @@ def index():
     connection = mysql.connector.connect(**db_config)
 
     # Prepara a query SQL para selecionar as empresas distintas
-    query_empresas = "SELECT DISTINCT empresa FROM indicadores2"
+    query_empresas = "SELECT DISTINCT empresa FROM indicadores"
     cursor_empresas = connection.cursor()
     cursor_empresas.execute(query_empresas)
     empresas = [empresa[0] for empresa in cursor_empresas.fetchall()]
@@ -30,21 +30,21 @@ def index():
 
         # Prepara a query SQL para selecionar os indicadores filtrados
         if empresa_selecionada:
-            query_indicadores = "SELECT * FROM indicadores2 WHERE empresa = %s"
+            query_indicadores = "SELECT * FROM indicadores WHERE empresa = %s"
             cursor_indicadores = connection.cursor(dictionary=True)
             cursor_indicadores.execute(query_indicadores, (empresa_selecionada,))
             indicadores = cursor_indicadores.fetchall()
             cursor_indicadores.close()
         else:
             # Se nenhuma empresa selecionada, exibe todos os indicadores
-            query_indicadores = "SELECT * FROM indicadores2"
+            query_indicadores = "SELECT * FROM indicadores"
             cursor_indicadores = connection.cursor(dictionary=True)
             cursor_indicadores.execute(query_indicadores)
             indicadores = cursor_indicadores.fetchall()
             cursor_indicadores.close()
     else:
         # Se o método for GET (primeiro acesso), exibe todos os indicadores
-        query_indicadores = "SELECT * FROM indicadores2"
+        query_indicadores = "SELECT * FROM indicadores"
         cursor_indicadores = connection.cursor(dictionary=True)
         cursor_indicadores.execute(query_indicadores)
         indicadores = cursor_indicadores.fetchall()

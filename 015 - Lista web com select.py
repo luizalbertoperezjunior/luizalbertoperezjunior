@@ -17,7 +17,7 @@ def obter_indicadores_paginados(empresa_selecionada=None, pagina=1, itens_por_pa
     connection = mysql.connector.connect(**db_config)
 
     # Prepara a query SQL para contar o total de registros
-    query_total = "SELECT COUNT(*) AS total FROM indicadores2"
+    query_total = "SELECT COUNT(*) AS total FROM indicadores"
     cursor_total = connection.cursor()
     cursor_total.execute(query_total)
     total_registros = cursor_total.fetchone()[0]
@@ -33,10 +33,10 @@ def obter_indicadores_paginados(empresa_selecionada=None, pagina=1, itens_por_pa
 
     # Prepara a query SQL para selecionar os indicadores com paginação
     if empresa_selecionada:
-        query_indicadores = "SELECT * FROM indicadores2 WHERE empresa = %s LIMIT %s, %s"
+        query_indicadores = "SELECT * FROM indicadores WHERE empresa = %s LIMIT %s, %s"
         parametros = (empresa_selecionada, indice_inicio, itens_por_pagina)
     else:
-        query_indicadores = "SELECT * FROM indicadores2 LIMIT %s, %s"
+        query_indicadores = "SELECT * FROM indicadores LIMIT %s, %s"
         parametros = (indice_inicio, itens_por_pagina)
 
     cursor_indicadores = connection.cursor(dictionary=True)
@@ -56,7 +56,7 @@ def index():
     connection = mysql.connector.connect(**db_config)
 
     # Prepara a query SQL para selecionar as empresas distintas
-    query_empresas = "SELECT DISTINCT empresa FROM indicadores2"
+    query_empresas = "SELECT DISTINCT empresa FROM indicadores"
     cursor_empresas = connection.cursor()
     cursor_empresas.execute(query_empresas)
     empresas = [empresa[0] for empresa in cursor_empresas.fetchall()]
